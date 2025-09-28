@@ -5,7 +5,22 @@ import { useState } from "react";
 export default function CreatePost() {
   const [selectedAudience, setSelectedAudience] = useState("public");
   const [showImagePreview, setShowImagePreview] = useState(false);
+  const [isDragOver , setIsDragOver] = useState(false);
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  }
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  }
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    // Handle file drop logic here
+
+  }
   return (
     <div className="min-h-screen bg-white flex justify-center items-start py-8 px-4">
       <div className="w-full max-w-2xl">
@@ -48,7 +63,15 @@ export default function CreatePost() {
             </div>
 
             {/* Image Upload Area */}
-            <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer group">
+            <div className={`border-2 border-solid border-gray-200 rounded-xl p-8 hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer group${
+             isDragOver 
+             ? 'border-blue-500 bg-blue-100'
+             : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+            }`}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+             >
               <div className="text-center">
                 <Camera size={48} className="mx-auto text-gray-400 group-hover:text-blue-500 mb-4" />
                 <h3 className="text-lg font-medium text-gray-700 mb-2">Add photos/videos</h3>
