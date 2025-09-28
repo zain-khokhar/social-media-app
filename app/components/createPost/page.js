@@ -5,27 +5,75 @@ import { useState } from "react";
 export default function CreatePost() {
   const [selectedAudience, setSelectedAudience] = useState("public");
   const [showImagePreview, setShowImagePreview] = useState(false);
-  const [isDragOver , setIsDragOver] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragOver(true);
   }
+  
   const handleDragLeave = (e) => {
     e.preventDefault();
     setIsDragOver(false);
   }
+  
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragOver(false);
-    // Handle file drop logic here
-
+    const files = Array.from(e.dataTransfer.files);
+    processFiles(files);
   }
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    processFiles(files);
+  }
+
+  const processFiles = (files) => {
+    const validFiles = files.filter(file => 
+      file.type.startsWith('image/') || file.type.startsWith('video/')
+    );
+
+    validFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileData = {
+          id: Date.now() + Math.random(),
+          file: file,
+          preview: e.target.result,
+          name: file.name,
+          size: file.size,
+          type: file.type
+        };
+        setUploadedFiles(prev => [...prev, fileData]);
+        setShowImagePreview(true);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const removeFile = (fileId) => {
+    setUploadedFiles(prev => prev.filter(file => file.id !== fileId));
+    if (uploadedFiles.length === 1) {
+      setShowImagePreview(false);
+    }
+  }
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
   return (
     <div className="min-h-screen bg-white flex justify-center items-start py-8 px-4">
       <div className="w-full max-w-2xl">
         {/* Header Card */}
         <div className="bg-white/95 backdrop-blur-sm shadow-2xl rounded-2xl mb-6 p-6 border border-white/20">
+          {/* ...existing code... */}
           <div className="flex items-center justify-between mb-4">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Create Post</h1>
             <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -62,25 +110,82 @@ export default function CreatePost() {
               ></textarea>
             </div>
 
+            {/* Image Preview Section */}
+            {showImagePreview && uploadedFiles.length > 0 && (
+              <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                <div className="flex items-center justify-between mb-3">
+                  <h4 className="font-medium text-gray-700">Uploaded Media ({uploadedFiles.length})</h4>
+                  <button 
+                    onClick={() => {
+                      setUploadedFiles([]);
+                      setShowImagePreview(false);
+                    }}
+                    className="text-red-500 hover:text-red-700 font-medium text-sm"
+                  >
+                    Clear All
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {uploadedFiles.map((fileData) => (
+                    <div key={fileData.id} className="relative group">
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+                        {fileData.type.startsWith('image/') ? (
+                          <img 
+                            src={fileData.preview} 
+                            alt={fileData.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <video 
+                            src={fileData.preview}
+                            className="w-full h-full object-cover"
+                            controls
+                          />
+                        )}
+                      </div>
+                      <button
+                        onClick={() => removeFile(fileData.id)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                      >
+                        <X size={14} />
+                      </button>
+                      <div className="mt-1 text-xs text-gray-500 truncate">
+                        {fileData.name} ({formatFileSize(fileData.size)})
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Image Upload Area */}
-            <div className={`border-2 border-solid border-gray-200 rounded-xl p-8 hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer group${
-             isDragOver 
-             ? 'border-blue-500 bg-blue-100'
-             : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
-            }`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-             >
+            <div 
+              className={`border-2 border-solid rounded-xl p-8 transition-all cursor-pointer group ${
+                isDragOver 
+                  ? 'border-blue-500 bg-blue-100' 
+                  : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById('fileInput').click()}
+            >
               <div className="text-center">
                 <Camera size={48} className="mx-auto text-gray-400 group-hover:text-blue-500 mb-4" />
                 <h3 className="text-lg font-medium text-gray-700 mb-2">Add photos/videos</h3>
                 <p className="text-gray-500 text-sm">or drag and drop</p>
-                <input type="file" className="hidden" accept="image/*,video/*" multiple />
+                <input 
+                  id="fileInput"
+                  type="file" 
+                  className="hidden" 
+                  accept="image/*,video/*" 
+                  multiple 
+                  onChange={handleFileSelect}
+                />
               </div>
             </div>
 
-            {/* Enhanced Features */}
+            {/* ...existing code... */}
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
               <span className="font-medium text-gray-700">Add to your post</span>
               <div className="flex space-x-3">
@@ -96,7 +201,6 @@ export default function CreatePost() {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex space-x-3 pt-4">
               <button className="flex-1 py-3 px-6 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors">
                 Save Draft
@@ -108,7 +212,7 @@ export default function CreatePost() {
           </div>
         </div>
 
-        {/* Tips Card */}
+        {/* ...existing code... */}
         <div className="bg-white/95 backdrop-blur-sm shadow-2xl rounded-2xl p-6 border border-white/20">
           <h3 className="font-semibold text-gray-900 mb-3">✨ Tips for great posts</h3>
           <ul className="space-y-2 text-sm text-gray-600">
