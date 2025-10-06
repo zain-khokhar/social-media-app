@@ -1,12 +1,33 @@
 "use client";
 import { ImageIcon, MapPin, Smile, X, Camera, Globe, Users, Lock } from "lucide-react";
 import { useState } from "react";
-
 export default function CreatePost() {
   const [selectedAudience, setSelectedAudience] = useState("public");
   const [showImagePreview, setShowImagePreview] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [url , setUrl] = useState("");
+
+  // image upload handlers
+   const handleupload = async () =>{
+    if(!uploadedFiles.length) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(uploadedFiles[0])
+    reader.onloadend = async () =>{
+      const base64data = reader.result;
+      console.log(base64data);
+
+    const response = await fetch ('/api/upload',{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({uploadedFiles: base64data}),
+    })
+        const data = response.json;
+  console.log(setUrl(data.url));
+  }
+   }
+
+
 
   const handleDragOver = (e) => {
     e.preventDefault();
