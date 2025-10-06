@@ -12,7 +12,7 @@ export default function CreatePost() {
    const handleupload = async () =>{
     if(!uploadedFiles.length) return;
     const reader = new FileReader();
-    reader.readAsDataURL(uploadedFiles[0])
+    reader.readAsDataURL(uploadedFiles[0].file)
     reader.onloadend = async () =>{
       const base64data = reader.result;
       console.log(base64data);
@@ -22,8 +22,9 @@ export default function CreatePost() {
       headers:{'content-type':'application/json'},
       body:JSON.stringify({uploadedFiles: base64data}),
     })
-        const data = response.json;
-  console.log(setUrl(data.url));
+        const data = await response.json();
+  setUrl(data.url);
+    
   }
    }
 
@@ -226,7 +227,7 @@ export default function CreatePost() {
               <button className="flex-1 py-3 px-6 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors">
                 Save Draft
               </button>
-              <button className="flex-1 py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02]">
+              <button  className="flex-1 py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02]" onClick={handleupload}>
                 Share Post
               </button>
             </div>
