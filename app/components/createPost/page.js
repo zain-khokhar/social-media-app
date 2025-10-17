@@ -10,6 +10,7 @@ export default function Home() {
 
   const handleFileChange = (e) => {
     if (e.target.files) {
+      console.log('Selected file:', e.target.files[0]);
       setFile(e.target.files[0]);
     }
   };
