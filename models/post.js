@@ -9,6 +9,7 @@ const postSchema = new mongoose.Schema({
     url:{
         typeof: string,
         required:true,
-        
+
     }
 })
+module.exports = mongoose.model('post',postSchema);
