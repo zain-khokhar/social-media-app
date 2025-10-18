@@ -4,6 +4,12 @@ import { NextResponse } from "next/server";
 export  async function POST(req , res) {
     const data = await req.body;
     try{
+        if(!data){
+            return NextResponse.json(
+                {success:false,error:"no data provided"},
+                {status:400}
+            )
+        }
         
         console.log("Received Data:", data);
     }
