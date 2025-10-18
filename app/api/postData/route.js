@@ -10,7 +10,9 @@ export  async function POST(req , res) {
                 {status:400}
             )
         }
-      
+      // save to database process here
+
+    
 
         console.log("Received Data:", data);
     }
