@@ -10,7 +10,8 @@ export  async function POST(req , res) {
                 {status:400}
             )
         }
-        
+      
+
         console.log("Received Data:", data);
     }
     catch(error){
