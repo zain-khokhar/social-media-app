@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+const POST_SCHEMA = require('@/models/post');
 
 
 export  async function POST(req , res) {
