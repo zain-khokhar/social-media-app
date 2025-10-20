@@ -13,7 +13,7 @@ export  async function POST(req , res) {
         }
       // save to database process here
     
-    
+    const newPost = new POST_SCHEMA({title,url});
 
  
     }
