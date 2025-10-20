@@ -10,7 +10,7 @@ export default function CreatePost() {
   const [error, setError] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-   const postUpload = async (title , url) => {
+   const postUpload = async (title , URL) => {
     try {
       const response = await fetch('/api/postData',{
         method:'POST',
@@ -45,6 +45,7 @@ export default function CreatePost() {
       });
 
       const data = await res.json();
+      const URL = data.url;
 
       if (data.success) {
         console.log('Upload successful:', data.url);
