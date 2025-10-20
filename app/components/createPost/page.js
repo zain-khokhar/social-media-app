@@ -10,6 +10,20 @@ export default function CreatePost() {
   const [error, setError] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
+   const postUpload = async (title , url) => {
+    try {
+      const response = await fetch('/api/postData',{
+        method:'POST',
+        headers:{
+          'content-type':'application/json'
+        },
+        body:JSON.stringify({title,url})
+      })
+    } catch (error) {
+      
+    }
+   }
+
   // image upload handlers
   const handleupload = async () => {
     if (!uploadedFiles.length) {
