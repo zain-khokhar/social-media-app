@@ -3,19 +3,19 @@ const POST_SCHEMA = require('@/models/post');
 
 
 export  async function POST(req , res) {
-    const data = await req.body;
+    const {title , url} = await req.body;
     try{
-        if(!data){
+        if(!title || !url){
             return NextResponse.json(
                 {success:false,error:"no data provided"},
                 {status:400}
             )
         }
       // save to database process here
-
+    
     
 
-        console.log("Received Data:", data);
+ 
     }
     catch(error){
         console.error('Error processing data:', error);
