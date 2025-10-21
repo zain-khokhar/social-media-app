@@ -49,7 +49,7 @@ export default function CreatePost() {
     }
   }
 
-  // ---------------post data handler---------------
+
 
 
 
