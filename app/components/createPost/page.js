@@ -46,7 +46,7 @@ export default function CreatePost() {
             headers:{'content-type':'application/json'},
             body:JSON.stringify({
              title:title,
-             imageurl :URL,
+             url :URL,
             })
           })
          } catch (error) {
