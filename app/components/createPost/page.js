@@ -10,19 +10,6 @@ export default function CreatePost() {
   const [error, setError] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-   const postUpload = async (title , URL) => {
-    try {
-      const response = await fetch('/api/postData',{
-        method:'POST',
-        headers:{
-          'content-type':'application/json'
-        },
-        body:JSON.stringify({title,url})
-      })
-    } catch (error) {
-      
-    }
-   }
 
   // image upload handlers
   const handleupload = async () => {
@@ -62,6 +49,12 @@ export default function CreatePost() {
     }
   }
 
+  // ---------------post data handler---------------
+
+  const handlesubmit = (e) => {
+    e.preventDefault();
+    // Handle post submission logic here
+  }
 
 
   const handleDragOver = (e) => {
