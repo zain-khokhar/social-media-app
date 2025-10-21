@@ -51,11 +51,6 @@ export default function CreatePost() {
 
   // ---------------post data handler---------------
 
-  const handlesubmit = (e) => {
-    e.preventDefault();
-    // Handle post submission logic here
-    alert('Post submitted!');
-  }
 
 
   const handleDragOver = (e) => {
@@ -282,7 +277,7 @@ export default function CreatePost() {
               </button>
               <button  
                 className="flex-1 py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed" 
-                onClick={handleupload}
+                onClick={handleupload }
                 disabled={uploading || !uploadedFiles.length}
               >
                 {uploading ? 'Uploading...' : 'Share Post'}
