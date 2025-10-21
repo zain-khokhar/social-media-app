@@ -54,6 +54,7 @@ export default function CreatePost() {
   const handlesubmit = (e) => {
     e.preventDefault();
     // Handle post submission logic here
+    alert('Post submitted!');
   }
 
 
