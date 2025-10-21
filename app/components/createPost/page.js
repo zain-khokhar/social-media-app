@@ -9,7 +9,8 @@ export default function CreatePost() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
-  const [title , setTitle] = useState('Hello');
+  const [title , setTitle] = useState('');
+  console.log(title);
 
 
   // image upload handlers
@@ -44,7 +45,8 @@ export default function CreatePost() {
             method:'POST',
             headers:{'content-type':'application/json'},
             body:JSON.stringify({
-
+             title:title,
+             imageurl :URL,
             })
           })
          } catch (error) {
@@ -160,7 +162,7 @@ export default function CreatePost() {
           {/* Post Content */}
           <div className="space-y-4">
             <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-200">
-              <textarea 
+              <textarea value={title} onChange={(e)=> setTitle(e.target.value) }
                 rows={4}
                 placeholder="What's on your mind, John?"
                 className="w-full border-0 resize-none text-lg placeholder-gray-500 focus:outline-none focus:ring-0 bg-transparent text-gray-800 font-medium"
