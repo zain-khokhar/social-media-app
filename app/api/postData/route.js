@@ -3,7 +3,7 @@ const POST_SCHEMA = require('@/models/post');
 
 
 export  async function POST(req , res) {
-    const {title , url} = await req.body;
+    const {title , url} = await req.json();
     try{
         if(!title || !url){
             return NextResponse.json(
