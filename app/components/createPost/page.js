@@ -50,7 +50,7 @@ export default function CreatePost() {
             })
           })
          } catch (error) {
-          
+          console.log('Error while posting data to database',error);
          }
       } else {
         setError(data.error || 'Upload failed. Please try again.');
